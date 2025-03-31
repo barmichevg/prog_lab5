@@ -14,7 +14,7 @@ public class Coordinates implements Validatable{
     public Coordinates (Integer x, float y) {
         this.x = x;
         this.y = y;
-        if (!validate()){throw new ValidationException("Coordinates");}//?
+        if (!validate()){throw new ValidationException("Coordinates");}
     }
 
     public Coordinates(String s) {
@@ -62,6 +62,6 @@ public class Coordinates implements Validatable{
 
     @Override
     public String toString() {
-        return "Координата x: " + x + ", Координата y: " + y;
+        return x + ";" + y;
     }
 }

@@ -35,24 +35,21 @@ public class Update extends Command {
                 console.println("не существующий ID");
                 return false;
             }
-            console.println("* Создание нового Дракона:");
+            console.println("* Обновление Лабораторной:");//???????
             var d = Ask.askLabWork(console, collectionManager);
             if (d != null && d.validate()) {
                 collectionManager.add(d);
-                collectionManager.addLog("add " + d.getId(), true);
                 collectionManager.update();
 
                 var old = collectionManager.byId(id);
                 collectionManager.swap(d.getId(), id);
-                collectionManager.addLog("swap " + old.getId() + " " + id, false);
                 collectionManager.update();
 
                 collectionManager.remove(old.getId());
-                collectionManager.addLog("remove " + old.getId(), false);
                 collectionManager.update();
                 return true;
             } else {
-                console.println("Поля Дракона не валидны! Дракон не создан!");
+                console.println("Поля Лабораторной не валидны! Лабораторная не обновлена!");//??????
                 return false;
             }
         } catch (Ask.AskBreak e) {

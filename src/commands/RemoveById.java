@@ -35,7 +35,6 @@ public class RemoveById extends Command {
             return false;
         }
         collectionManager.remove(id);
-        collectionManager.addLog("remove " + id, true);
         collectionManager.update();
         console.println("Лабораторная успешно удалён!");
         return true;

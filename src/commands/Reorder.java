@@ -26,7 +26,6 @@ public class Reorder extends Command {
             console.println("Использование: '" + getName() + "'");
             return false;
         }
-        collectionManager.addLog("reorder", true);
         collectionManager.isAscendingSort ^= true;
         collectionManager.update();
         return true;

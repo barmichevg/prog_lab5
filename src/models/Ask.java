@@ -16,17 +16,16 @@ import java.lang.IllegalArgumentException;
  */
 public class Ask {
     public static class AskBreak extends Exception {}
-
     public static LabWork askLabWork(Console console, CollectionManager collectionManager) throws AskBreak {
         /**
-         *     private String name; //Поле не может быть null, Строка не может быть пустой+
-         *     private Coordinates coordinates; //Поле не может быть null+
-         *     java.time.LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
-         *     private Double minimalPoint; //Поле может быть null, Значение поля должно быть больше 0+
-         *     private String description; //Длина строки не должна быть больше 5287, Поле не может быть null
-         *     private int tunedInWorks;
-         *     private Difficulty difficulty; //Поле не может быть null
-         *     private Discipline discipline; //Поле не может быть null
+         * String name; //Поле не может быть null, Строка не может быть пустой+
+         * Coordinates coordinates; //Поле не может быть null+
+         * LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
+         * Double minimalPoint; //Поле может быть null, Значение поля должно быть больше 0+
+         * String description; //Длина строки не должна быть больше 5287, Поле не может быть null
+         * int tunedInWorks;
+         * Difficulty difficulty; //Поле не может быть null
+         * Discipline discipline; //Поле не может быть null
          */
         try {
             console.print("name: ");
@@ -41,7 +40,7 @@ public class Ask {
             LocalDate creationDate;
             while (true) {
                 console.print("creationDate: " +
-                        LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + ": ");
+                        LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "(dd-MM-yyyy): ");
                 var line = console.readln().trim();
                 if (line.equals("exit")) throw new AskBreak();
                 if (line.equals("")) {
@@ -103,8 +102,6 @@ public class Ask {
 
     public static Coordinates askCoordinates(Console console) throws AskBreak {
         try {
-//            private Integer x; //Поле не может быть null
-//            private float y; //Максимальное значение поля: 654
             console.print("coordinates.x: ");
             int x;
             while (true) {
@@ -153,8 +150,6 @@ public class Ask {
 
     public static Discipline askDiscipline(Console console) throws AskBreak {
         try {
-//            private String name; //Поле не может быть null, Строка не может быть пустой
-//            private Long practiceHours; //Поле не может быть null
             console.print("name: ");
             String name;
             while (true) {

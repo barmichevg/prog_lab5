@@ -1,12 +1,10 @@
 package commands;
-////////////////////////???????????ПРОВЕРКА
+
 import models.LabWork;
 import managers.CollectionManager;
 import utility.Console;
 
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Stack;
 import java.util.Vector;
 
 /**
@@ -22,7 +20,7 @@ public class PrintAscending extends Command {
         this.collectionManager = collectionManager;
     }
 
-    /**???????????????????
+    /**
      * Выполняет команду
      * @return Успешность выполнения команды.
      */
@@ -35,19 +33,11 @@ public class PrintAscending extends Command {
         }
         Vector<LabWork> CollectionCopy = collectionManager.getCollection();
         Comparator<LabWork> comparator = new Comparator<LabWork>() {
-            @Override
             public int compare(LabWork o1, LabWork o2) {
-//                 Здесь нужно определить логику сравнения объектов LabWork
-//                 Например, если есть поле id:
                 return Integer.compare(o1.getId(), o2.getId());
-//                 Или если нужно сравнивать по нескольким полям:
-//                 int nameComparison = o1.getName().compareTo(o2.getName());
-//                 if (nameComparison != 0) return nameComparison;
-//                 return Integer.compare(o1.getId(), o2.getId());
             }
         };
-        Collections.sort(CollectionCopy, comparator);
-//        Collections.sort(CollectionCopy);
+        CollectionCopy.sort(comparator);//Collections.sort(CollectionCopy, comparator);
         for (LabWork labWork : CollectionCopy) {
             console.println(labWork.toString());
         }

@@ -28,12 +28,9 @@ public class Clear extends Command {
             return false;
         }
 //????????????????????????????????????????????????
-        var isFirst = true;
         while (collectionManager.getCollection().size() > 0) {
             var labWork = collectionManager.getCollection().lastElement();
             collectionManager.remove(labWork.getId());
-            collectionManager.addLog("remove " + labWork.getId(),isFirst);
-            isFirst = false;
         }
         collectionManager.update();
         console.println("Коллекция очищена!");

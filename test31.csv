@@ -1,6 +1,0 @@
-id,name,coordinates_x,coordinates_y,creation_date,minimalPoint,description,tunedInWorks,difficulty,discipline_name,discipline_practiceHours;
-"1";"Lab Alpha";"Координата x: 10, Координата y: 12.32";"23-11-2021";"95.5";"First lab";"1";"NORMAL";"Имя: Physics, Часы практики: 12";
-"2";"Lab Beta";"Координата x: 20, Координата y: 42.22";"20-12-2021";"95.5";"Second lab";"3";"VERY_HARD";"Имя: Mathematics, Часы практики: 3";
-"3";"Lab Alpha";"Координата x: 30, Координата y: 22.31";"22-04-2021";"95.5";"Third lab";"8";"INSANE";"Имя: Computer Science, Часы практики: 1";
-"4";"Lab Alpha";"Координата x: 40, Координата y: 7.37";"28-05-2021";"95.5";"Fourth lab";"2";"HOPELESS";"Имя: Engineering, Часы практики: 4";
-"5";"Lab Alpha";"Координата x: 50, Координата y: 7.27";"23-01-2021";"95.5";"Fifth lab";"1";"NORMAL";"Имя: Physics, Часы практики: 8";

@@ -13,9 +13,8 @@ import java.time.format.DateTimeFormatter;
 /**
  * Класс лабораторной работы
  */
-
 public class LabWork implements Comparable<Element>, Validatable {
-    private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    private Integer id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
     private LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
@@ -24,8 +23,6 @@ public class LabWork implements Comparable<Element>, Validatable {
     private int tunedInWorks;
     private Difficulty difficulty; //Поле не может быть null
     private Discipline discipline; //Поле не может быть null
-
-//?    static int nextId = 1;
 
     public LabWork(int id, String name, Coordinates coordinates, LocalDate creationDate, Double minimalPoint, String description, int tunedInWorks, Difficulty difficulty, Discipline discipline) {
         this.id = id;
@@ -39,7 +36,6 @@ public class LabWork implements Comparable<Element>, Validatable {
         this.discipline = discipline;
     }
 
-    //?
     public LabWork(int id, String name, Coordinates coordinates, Double minimalPoint, String description, int tunedInWorks, Difficulty difficulty, Discipline discipline) {
         this(id, name, coordinates, LocalDate.now(), minimalPoint, description, tunedInWorks, difficulty, discipline);
     }
@@ -115,6 +111,7 @@ public class LabWork implements Comparable<Element>, Validatable {
             try { tunedInWorks = Integer.parseInt(a[6]); } catch (NumberFormatException e) { tunedInWorks = Integer.parseInt(null); }
             try { difficulty = Difficulty.valueOf(a[7]); } catch (NullPointerException | IllegalArgumentException  e) { difficulty = null; }
             discipline = new Discipline(a[8]);
+            return new LabWork(id, name, coordinates, creationDate, minimalPoint, description, tunedInWorks, difficulty, discipline);
         }catch (ArrayIndexOutOfBoundsException e) {}
         return null;
     }
@@ -135,14 +132,14 @@ public class LabWork implements Comparable<Element>, Validatable {
 
     @Override
     public boolean validate() {
-//        if (id <= 0) return false;
-//        if (name == null || name.isEmpty()) return false;
-//        if (coordinates == null) return false;
-//        if (creationDate == null) return false;
-//        if (minimalPoint != null && minimalPoint <= 0) return false;
-//        if (description == null || description.length() <= 5287) return false;
-//        if (difficulty == null) return false;
-//        if (discipline == null) return false;
+        if (id <= 0) return false;
+        if (name == null || name.isEmpty()) return false;
+        if (coordinates == null || !coordinates.validate()) return false;
+        if (creationDate == null) return false;
+        if (minimalPoint != null && minimalPoint <= 0) return false;
+        if (description == null || description.length() >= 5287) return false;
+        if (difficulty == null) return false;
+        if (discipline == null || !discipline.validate()) return false;
         return true;
     }
 
@@ -166,14 +163,14 @@ public class LabWork implements Comparable<Element>, Validatable {
 
     @Override
     public String toString() {
-        return "d{\"id\": " + id + ", " +
-                "\"name\": \"" + name + "\", " +
-                "\"coordinates\": \"" + coordinates + "\", " +
-                "\"creationDate\" = \"" + creationDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "\", " +
-                "\"minimalPoint\": " + (minimalPoint == null ? "null" : "\""+minimalPoint.toString()+"\"") + ", " +
-                "\"description\" = \"" + description + "\", " +
-                "\"tunedInWorks\": \"" + tunedInWorks + "\", " +
-                "\"difficulty\" = \"" + difficulty + "\", " +
-                "\"discipline\": \"" + discipline + "\", " +"}";
+        return "{\"id\": " + id + ", " +
+                "\"name\": " + name + ", " +
+                "\"coordinates\": " + coordinates + ", " +
+                "\"creationDate\": " + creationDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + ", " +
+                "\"minimalPoint\": " + (minimalPoint == null ? "null" : minimalPoint.toString()) + ", " +
+                "\"description\": " + description + ", " +
+                "\"tunedInWorks\": " + tunedInWorks + ", " +
+                "\"difficulty\": " + difficulty + ", " +
+                "\"discipline\": " + discipline + "}";
     }
 }

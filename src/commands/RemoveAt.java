@@ -31,9 +31,8 @@ public class RemoveAt extends Command {
         try {
             var d = collectionManager.getCollection().get(ind);
             collectionManager.remove(d.getId());
-            collectionManager.addLog("remove " + d.getId(), true);
             collectionManager.update();
-            console.println("Дракон успешно удалён!");
+            console.println("Лабораторная успешно удалена!");
             return true;
         } catch (IndexOutOfBoundsException e) { console.println("index за границами допустимых значений"); return false; }
     }

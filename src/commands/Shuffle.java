@@ -1,5 +1,5 @@
 package commands;
-////////////////////////???????????ПРОВЕРКА
+
 import managers.CollectionManager;
 import utility.Console;
 
@@ -15,7 +15,7 @@ public class Shuffle extends Command {
         this.console = console;
         this.collectionManager = collectionManager;
     }
-    /**???????????????????????????????
+    /**
      * Выполняет команду
      * @return Успешность выполнения команды.
      */

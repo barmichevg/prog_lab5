@@ -4,7 +4,7 @@ import managers.CollectionManager;
 import models.LabWork;
 import utility.Console;
 
-/**???
+/**
  * Вывести любой объект из коллекции, значение поля coordinates которого является минимальным
  */
 public class MinByCoordinates extends Command {
@@ -29,7 +29,7 @@ public class MinByCoordinates extends Command {
         }
         LabWork min = null;
         for (var e : collectionManager.getCollection()) {
-            if (min==null || min.getCoordinates().getx() < e.getCoordinates().getx()) min = e;
+            if (min==null || min.getCoordinates().getx() > e.getCoordinates().getx()) min = e;
         }
         if (min == null) {
             console.println("Лабораторных не обнаружено.");

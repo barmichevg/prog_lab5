@@ -1,5 +1,5 @@
 package commands;
-////////////////////////???????????ПРОВЕРКА
+
 import managers.CollectionManager;
 import models.LabWork;
 import utility.Console;
@@ -25,16 +25,16 @@ public class FilterLessThanMinimalPoint extends Command {
      */
     @Override
     public boolean apply(String[] arguments) {
-        if (!arguments[1].isEmpty()) {
+        if (arguments[1].isEmpty()) {
             console.println("Неправильное количество аргументов!");
             console.println("Использование: '" + getName() + "'");
             return false;
         }
         var minimalPoint = Double.parseDouble(arguments[1]);
         var LabWork = filterLessThanMinimalPoint(minimalPoint);
-        if (LabWork.isEmpty()) {console.println("Продуктов с ценой " + minimalPoint + " не обнаружено.");}
+        if (LabWork.isEmpty()) {console.println("Лабораторных с minimalPoint меньше " + minimalPoint + " не обнаружено.");}
         else {
-            console.println("Продуктов с ценой " + minimalPoint + ": " + LabWork.size() + " шт.\n");
+            console.println("Лабораторных с minimalPoint меньше " + minimalPoint + " встречается " + LabWork.size() + " раз.\n");
             LabWork.forEach(console::println);
         }
         return true;

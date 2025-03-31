@@ -62,6 +62,6 @@ public class Discipline implements Validatable {
 
     @Override
     public String toString() {
-        return "Имя: " + name + ", Часы практики: " + practiceHours;
+        return name + ";" + practiceHours;
     }
 }

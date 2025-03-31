@@ -5,7 +5,7 @@ import models.Ask;
 import models.LabWork;
 import utility.Console;
 
-/**FIX выводит максимальное
+/**
  * Добавить новый элемент в коллекцию
  */
 public class Add extends Command {
@@ -29,16 +29,15 @@ public class Add extends Command {
                 console.println("Использование: '" + getName() + "'");
                 return false;
             }
-            console.println("* Создание нового Дракона:");
+            console.println("* Создание новой Лабораторной:");
             LabWork d = Ask.askLabWork(console, collectionManager);
 
             if (d != null && d.validate()) {
                 collectionManager.add(d);
-                collectionManager.addLog("add " + d.getId(), true);
-                console.println("Дракон успешно добавлен!");
+                console.println("Лабораторная успешно добавлена!");
                 return true;
             } else {
-                console.printError("Поля дракона не валидны! Дракон не создан!");
+                console.printError("Поля Лабораторной не валидны! Лабораторная не создана!");
                 return false;
             }
         } catch (Ask.AskBreak e) {
