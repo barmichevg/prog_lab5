@@ -1,7 +1,6 @@
 package commands;
 
 import utility.Console;
-import utility.ExecutionResponse;
 
 /**
  * Завершить программу (без сохранения в файл)
@@ -13,15 +12,18 @@ public class Exit extends Command {
         super("exit", "завершить программу (без сохранения в файл)");
         this.console = console;
     }
-
     /**
      * Выполняет команду
      * @return Успешность выполнения команды.
      */
     @Override
-    public ExecutionResponse apply(String[] arguments) {
-        if (!arguments[1].isEmpty()) return new ExecutionResponse(false, "Неправильное количество аргументов!\nИспользование: '" + getName() + "'");
-
-        return new ExecutionResponse("exit"); //"Завершение выполнения...");
+    public boolean apply(String[] arguments) {
+        if (!arguments[1].isEmpty()) {
+            console.println("Неправильное количество аргументов!");
+            console.println("Использование: '" + getName() + "'");
+            return false;
+        }
+        console.println("Завершение выполнения...");
+        return true;
     }
 }

@@ -1,5 +1,8 @@
 package models;
 
+/**
+ * Перечисление сложностей
+ */
 public enum Difficulty {
     NORMAL,
     VERY_HARD,

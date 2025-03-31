@@ -3,9 +3,8 @@ package commands;
 import managers.CollectionManager;
 import models.LabWork;
 import utility.Console;
-import utility.ExecutionResponse;
 
-/**проверка
+/**???
  * Вывести любой объект из коллекции, значение поля coordinates которого является минимальным
  */
 public class MinByCoordinates extends Command {
@@ -13,26 +12,30 @@ public class MinByCoordinates extends Command {
     private final CollectionManager collectionManager;
 
     public MinByCoordinates(Console console, CollectionManager collectionManager) {
-        super("min_by_coordinates", "Вывести любой объект из коллекции, значение поля coordinates которого является минимальным");
+        super("min_by_coordinates", "вывести любой объект из коллекции, значение поля coordinates которого является минимальным");
         this.console = console;
         this.collectionManager = collectionManager;
     }
-
     /**
-     * Исполнение команды
-     *
-     * @param arguments массив с аргументами
-     * @return возвращает ответ о выполнении команды
+     * Выполняет команду
+     * @return Успешность выполнения команды.
      */
     @Override
-    public ExecutionResponse apply(String[] arguments) {
-        if (!arguments[1].isEmpty()) return new ExecutionResponse(false, "Неправильное количество аргументов!\nИспользование: '" + getName() + "'");
-
+    public boolean apply(String[] arguments) {
+        if (!arguments[1].isEmpty()) {
+            console.println("Неправильное количество аргументов!");
+            console.println("Использование: '" + getName() + "'");
+            return false;
+        }
         LabWork min = null;
         for (var e : collectionManager.getCollection()) {
-            if (min==null || min.getCoordinates().getX() > e.getCoordinates().getX()) min = e;
+            if (min==null || min.getCoordinates().getx() < e.getCoordinates().getx()) min = e;
         }
-        if (min == null) {return new ExecutionResponse(false, "LabWork не обнаружено.");}
-        else {return new ExecutionResponse(min.toString());}
+        if (min == null) {
+            console.println("Лабораторных не обнаружено.");
+        } else {
+            console.println(min.toString() + "\n");
+        }
+        return true;
     }
 }

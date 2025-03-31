@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+import managers.CollectionManager;
 import models.*;
 import utility.Console;
 import java.util.NoSuchElementException;
@@ -13,10 +15,9 @@ import java.lang.IllegalArgumentException;
  * Класс чтения объекта
  */
 public class Ask {
-    public static class AskBreak extends Exception {
-    }
+    public static class AskBreak extends Exception {}
 
-    public static LabWork askLabWork(Console console, int id) throws AskBreak {
+    public static LabWork askLabWork(Console console, CollectionManager collectionManager) throws AskBreak {
         /**
          *     private String name; //Поле не может быть null, Строка не может быть пустой+
          *     private Coordinates coordinates; //Поле не может быть null+
@@ -27,40 +28,50 @@ public class Ask {
          *     private Difficulty difficulty; //Поле не может быть null
          *     private Discipline discipline; //Поле не может быть null
          */
-
         try {
             console.print("name: ");
             String name;
             while (true) {
                 name = console.readln().trim();
                 if (name.equals("exit")) throw new AskBreak();
-                if (!name.isEmpty()) break;
+                if (!name.equals("")) break;
+                console.print("name: ");
             }
-
             var coordinates = askCoordinates(console);
-
             LocalDate creationDate;
             while (true) {
-
                 console.print("creationDate: " +
                         LocalDate.now().format(DateTimeFormatter.ISO_DATE_TIME) + " or 2023-03-11): ");
                 var line = console.readln().trim();
                 if (line.equals("exit")) throw new AskBreak();
-                if (line.equals("")) { creationDate = null; break;}
-                try { creationDate = LocalDate.parse(line, DateTimeFormatter.ISO_DATE_TIME);break;} catch (DateTimeParseException e) { }
-                try { creationDate = LocalDate.parse(line+"T00:00:00.0000",DateTimeFormatter.ISO_DATE_TIME);break; } catch (DateTimeParseException e) { }
+                if (line.equals("")) {
+                    creationDate = null;
+                    break;
+                }
+                try {
+                    creationDate = LocalDate.parse(line, DateTimeFormatter.ISO_DATE_TIME);
+                    break;
+                } catch (DateTimeParseException e) {}
+                try {
+                    creationDate = LocalDate.parse(line + "T00:00:00.0000", DateTimeFormatter.ISO_DATE_TIME);
+                    break;
+                } catch (DateTimeParseException e) {}
             }
-
             console.print("minimalPoint: ");
             Double minimalPoint;
             while (true) {
                 var line = console.readln().trim();
                 if (line.equals("exit")) throw new AskBreak();
-                if (line.isEmpty()) {minimalPoint = null; break;}
-                try {minimalPoint = Double.parseDouble(line); if (minimalPoint > 0) break; } catch (NumberFormatException e) { }
+                if (line.isEmpty()) {
+                    minimalPoint = null;
+                    break;
+                }
+                try {
+                    minimalPoint = Double.parseDouble(line);
+                    if (minimalPoint > 0) break;
+                } catch (NumberFormatException e) {}
                 console.print("minimalPoint: ");
             }
-
             console.print("description: ");
             String description;
             while (true) {
@@ -70,26 +81,25 @@ public class Ask {
                 if (description.length() <= 5287) break;
                 console.print("description: ");
             }
-
             console.print("tunedInWorks: ");
             int tunedInWorks;
             while (true) {
                 var line = console.readln().trim();
                 if (line.equals("exit")) throw new AskBreak();
-                try {tunedInWorks = Integer.parseInt(line); break; } catch (NumberFormatException e) { }
+                try {
+                    tunedInWorks = Integer.parseInt(line);
+                    break;
+                } catch (NumberFormatException e) {}
                 console.print("tunedInWorks: ");
             }
-
             var difficulty = askDifficulty(console);
-
             var discipline = askDiscipline(console);
-
-                return new LabWork(id, name, coordinates, creationDate, minimalPoint, description, tunedInWorks, difficulty, discipline);
-            } catch (NoSuchElementException | IllegalStateException e) {
-                console.printError("Ошибка чтения");
-                return null;
-            }
+            return new LabWork(collectionManager.getFreeId(), name, coordinates, creationDate, minimalPoint, description, tunedInWorks, difficulty, discipline);
+        } catch (NoSuchElementException | IllegalStateException e) {
+            console.printError("Ошибка чтения");
+            return null;
         }
+    }
 
     public static Coordinates askCoordinates(Console console) throws AskBreak {
         try {
@@ -100,8 +110,8 @@ public class Ask {
             while (true) {
                 var line = console.readln().trim();
                 if (line.equals("exit")) throw new AskBreak();
-                if (!line.isEmpty()) {
-                    try { x = Integer.parseInt(line); break; } catch (NumberFormatException e) { }
+                if (!line.equals("")) {
+                    try { x = Integer.parseInt(line); break; } catch (NumberFormatException e) {}
                 }
                 console.print("coordinates.x: ");
             }
@@ -110,7 +120,7 @@ public class Ask {
             while (true) {
                 var line = console.readln().trim();
                 if (line.equals("exit")) throw new AskBreak();
-                if (!line.isEmpty()) {
+                if (!line.equals("")) {
                     try { y = Float.parseFloat(line); if (y<=654) break; } catch (NumberFormatException e) { }
                 }
                 console.print("coordinates.y: ");
@@ -130,7 +140,7 @@ public class Ask {
                 var line = console.readln().trim();
                 if (line.equals("exit")) throw new AskBreak();
                 if (!line.isEmpty()) {
-                    try { r = Difficulty.valueOf(line); break; } catch (NullPointerException | IllegalArgumentException  e) { }
+                    try { r = Difficulty.valueOf(line); break; } catch (NullPointerException | IllegalArgumentException  e) {}
                 }
                 console.print("Difficulty: ");
             }
@@ -158,7 +168,7 @@ public class Ask {
                 var line = console.readln().trim();
                 if (line.equals("exit")) throw new AskBreak();
                 if (!line.isEmpty()) {
-                    try { practiceHours = Long.parseLong(line); break; } catch (NumberFormatException e) { }
+                    try { practiceHours = Long.parseLong(line); break; } catch (NumberFormatException e) {}
                 }
                 console.print("practiceHours: ");
             }

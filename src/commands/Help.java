@@ -2,8 +2,6 @@ package commands;
 
 import utility.Console;
 import managers.CommandManager;
-import utility.ExecutionResponse;
-import java.util.stream.Collectors;
 
 /**
  * Вывести справку по доступным командам
@@ -17,16 +15,20 @@ public class Help extends Command {
         this.console = console;
         this.commandManager = commandManager;
     }
-
     /**
      * Выполняет команду
      * @return Успешность выполнения команды.
      */
     @Override
-    public ExecutionResponse apply(String[] arguments) {
-        if (!arguments[1].isEmpty()) return new ExecutionResponse(false, "Неправильное количество аргументов!\nИспользование: '" + getName() + "'");
-
-        return new ExecutionResponse(commandManager.getCommands().values().stream().map(command -> String.format(" %-35s%-1s%n", command.getName(), command.getDescription())).collect(Collectors.joining("\n")));
+    public boolean apply(String[] arguments) {
+        if (!arguments[1].isEmpty()) {
+            console.println("Неправильное количество аргументов!");
+            console.println("Использование: '" + getName() + "'");
+            return false;
+        }
+        commandManager.getCommands().values().forEach(command -> {
+            console.printTable(command.getName(), command.getDescription());
+        });
+        return true;
     }
 }
- 

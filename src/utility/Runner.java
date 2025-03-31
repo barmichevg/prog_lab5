@@ -12,6 +12,13 @@ import managers.CommandManager;
 import utility.Console;
 
 public class Runner {
+
+    public enum ExitCode {
+        OK,
+        ERROR,
+        EXIT
+    }
+
     private Console console;
     private final CommandManager commandManager;
     private final List<String> scriptStack = new ArrayList<>();
@@ -27,52 +34,23 @@ public class Runner {
      */
     public void interactiveMode() {
         try {
-            ExecutionResponse commandStatus;
+            ExitCode commandStatus;
             String[] userCommand = {"", ""};
 
-            while (true) {
+            do {
                 console.prompt();
                 userCommand = (console.readln().trim() + " ").split(" ", 2);
                 userCommand[1] = userCommand[1].trim();
 
                 commandManager.addToHistory(userCommand[0]);
                 commandStatus = launchCommand(userCommand);
+            } while (commandStatus != ExitCode.EXIT);
 
-                if (commandStatus.getMassage().equals("exit")) break;
-                console.println(commandStatus.getMassage());
-            }
         } catch (NoSuchElementException exception) {
             console.printError("Пользовательский ввод не обнаружен!");
         } catch (IllegalStateException exception) {
             console.printError("Непредвиденная ошибка!");
         }
-    }
-
-    /**
-     * Проверяет рекурсивность выполнения скриптов.
-     * @param argument Название запускаемого скрипта
-     * @return можно ли выполнять скрипт.
-     */
-    private boolean checkRecursion(String argument, Scanner scriptScanner) {
-        var recStart = -1;
-        var i = 0;
-        for (String script : scriptStack) {
-            i++;
-            if (argument.equals(script)) {
-                if (recStart < 0) recStart = i;
-                if (lengthRecursion < 0) {
-                    console.selectConsoleScanner();
-                    console.println("Была замечена рекурсия! Введите максимальную глубину рекурсии (0..500)");
-                    while (lengthRecursion < 0 || lengthRecursion > 500) {
-                        try { console.print("> "); lengthRecursion = Integer.parseInt(console.readln().trim()); } catch (NumberFormatException e) { console.println("длина не распознана"); }
-                    }
-                    console.selectFileScanner(scriptScanner);
-                }
-                if (i > recStart + lengthRecursion || i > 500)
-                    return false;
-            }
-        }
-        return true;
     }
 
 
@@ -81,20 +59,22 @@ public class Runner {
      * @param argument Аргумент скрипта
      * @return Код завершения.
      */
-    private ExecutionResponse scriptMode(String argument) {
+    public ExitCode scriptMode(String argument) {
         String[] userCommand = {"", ""};
-        StringBuilder executionOutput = new StringBuilder();
-
-        if (!new File(argument).exists()) return new ExecutionResponse(false, "Файл не существет!");
-        if (!Files.isReadable(Paths.get(argument))) return new ExecutionResponse(false, "Прав для чтения нет!");
-
+        ExitCode commandStatus;
         scriptStack.add(argument);
+        if (!new File(argument).exists()) {
+            console.printError("Файл не существет!");
+            return ExitCode.ERROR;
+        }
+        if (!Files.isReadable(Paths.get(argument))) {
+            console.printError("Прав для чтения нет!");
+            return ExitCode.ERROR;
+        }
         try (Scanner scriptScanner = new Scanner(new File(argument))) {
-
-            ExecutionResponse commandStatus;
-
             if (!scriptScanner.hasNext()) throw new NoSuchElementException();
             console.selectFileScanner(scriptScanner);
+
             do {
                 userCommand = (console.readln().trim() + " ").split(" ", 2);
                 userCommand[1] = userCommand[1].trim();
@@ -102,34 +82,49 @@ public class Runner {
                     userCommand = (console.readln().trim() + " ").split(" ", 2);
                     userCommand[1] = userCommand[1].trim();
                 }
-                executionOutput.append(console.getPrompt() + String.join(" ", userCommand) + "\n");
+                console.println(console.getPrompt() + String.join(" ", userCommand));
                 var needLaunch = true;
                 if (userCommand[0].equals("execute_script")) {
-                    needLaunch = checkRecursion(userCommand[1], scriptScanner);
+                    var recStart = -1;
+                    var i = 0;
+                    for (String script : scriptStack) {
+                        i++;
+                        if (userCommand[1].equals(script)) {
+                            if (recStart < 0) recStart = i;
+                            if (lengthRecursion < 0) {
+                                console.selectConsoleScanner();
+                                console.println("Была замечена рекурсия! Введите максимальную глубину рекурсии (0..500)");
+                                while (lengthRecursion < 0 || lengthRecursion > 500) {
+                                    try { console.print("> "); lengthRecursion = Integer.parseInt(console.readln().trim()); } catch (NumberFormatException e) { console.println("длина не распознан"); }
+                                }
+                                console.selectFileScanner(scriptScanner);
+                            }
+                            if (i > recStart + lengthRecursion || i > 500)
+                                needLaunch = false;
+                        }
+                    }
                 }
-
-                commandStatus = needLaunch ? launchCommand(userCommand) : new ExecutionResponse("Превышена максимальная глубина рекурсии");
-                if (userCommand[0].equals("execute_script")) console.selectFileScanner(scriptScanner);
-                executionOutput.append(commandStatus.getMassage()+"\n");
-            } while (commandStatus.getExitCode() && !commandStatus.getMassage().equals("exit") && console.isCanReadln());
+                commandStatus = needLaunch ? launchCommand(userCommand) : ExitCode.OK;
+            } while (commandStatus == ExitCode.OK && console.isCanReadln());
 
             console.selectConsoleScanner();
-            if (!commandStatus.getExitCode() && !(userCommand[0].equals("execute_script") && !userCommand[1].isEmpty())) {
-                executionOutput.append("Проверьте скрипт на корректность введенных данных!\n");
+            if (commandStatus == ExitCode.ERROR && !(userCommand[0].equals("execute_script") && !userCommand[1].isEmpty())) {
+                console.println("Проверьте скрипт на корректность введенных данных!");
             }
 
-            return new ExecutionResponse(commandStatus.getExitCode(), executionOutput.toString());
+            return commandStatus;
         } catch (FileNotFoundException exception) {
-            return new ExecutionResponse(false, "Файл со скриптом не найден!");
+            console.printError("Файл со скриптом не найден!");
+            //console.printError(exception.toString());
         } catch (NoSuchElementException exception) {
-            return new ExecutionResponse(false, "Файл со скриптом пуст!");
+            console.printError("Файл со скриптом пуст!");
         } catch (IllegalStateException exception) {
             console.printError("Непредвиденная ошибка!");
             System.exit(0);
         } finally {
             scriptStack.remove(scriptStack.size() - 1);
         }
-        return new ExecutionResponse("");
+        return ExitCode.ERROR;
     }
 
     /**
@@ -137,20 +132,26 @@ public class Runner {
      * @param userCommand Команда для запуска
      * @return Код завершения.
      */
-    private ExecutionResponse launchCommand(String[] userCommand) {
-        if (userCommand[0].equals("")) return new ExecutionResponse("");
+    private ExitCode launchCommand(String[] userCommand) {
+        if (userCommand[0].equals("")) return ExitCode.OK;
         var command = commandManager.getCommands().get(userCommand[0]);
 
-        if (command == null) return new ExecutionResponse(false, "Команда '" + userCommand[0] + "' не найдена. Наберите 'help' для справки");
+        if (command == null) {
+            console.printError("Команда '" + userCommand[0] + "' не найдена. Наберите 'help' для справки");
+            return ExitCode.ERROR;
+        }
 
         switch (userCommand[0]) {
-            case "execute_script" -> {
-                ExecutionResponse tmp = commandManager.getCommands().get("execute_script").apply(userCommand);
-                if (!tmp.getExitCode()) return tmp;
-                ExecutionResponse tmp2 = scriptMode(userCommand[1]);
-                return new ExecutionResponse(tmp2.getExitCode(), tmp.getMassage()+"\n"+tmp2.getMassage().trim());
+            case "exit" -> {
+                if (!commandManager.getCommands().get("exit").apply(userCommand)) return ExitCode.ERROR;
+                else return ExitCode.EXIT;
             }
-            default -> { return command.apply(userCommand); }
-        }
+            case "execute_script" -> {
+                if (!commandManager.getCommands().get("execute_script").apply(userCommand)) return ExitCode.ERROR;
+                else return scriptMode(userCommand[1]);
+            }
+            default -> { if (!command.apply(userCommand)) return ExitCode.ERROR; }
+        };
+        return ExitCode.OK;
     }
 }

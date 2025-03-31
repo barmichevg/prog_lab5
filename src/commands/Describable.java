@@ -9,7 +9,6 @@ public interface Describable {
      * @return имя
      */
     String getName();
-
     /**
      * Получить описание.
      * @return описание

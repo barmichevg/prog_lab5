@@ -2,29 +2,33 @@ package models;
 
 import managers.CollectionManager;
 import utility.Element;
+import utility.Validatable;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Objects;
+import java.time.format.DateTimeFormatter;
 
+/**
+ * Класс лабораторной работы
+ */
 
-public class LabWork extends Element {
+public class LabWork implements Comparable<Element>, Validatable {
     private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
-    private java.time.LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
+    private LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
     private Double minimalPoint; //Поле может быть null, Значение поля должно быть больше 0
     private String description; //Длина строки не должна быть больше 5287, Поле не может быть null
     private int tunedInWorks;
     private Difficulty difficulty; //Поле не может быть null
     private Discipline discipline; //Поле не может быть null
 
-    private static int nextId = 1;
+//?    static int nextId = 1;
 
-    public LabWork(int id, String name, Coordinates coordinates, LocalDate creationDate,
-                   Double minimalPoint, String description, int tunedInWorks, Difficulty difficulty, Discipline discipline){
-
-//    public LabWork(int id, String name, Coordinates coordinates, Double minimalPoint, String description, int tunedInWorks, Difficulty difficulty, Discipline discipline) {
-        this.id = nextId;
+    public LabWork(int id, String name, Coordinates coordinates, LocalDate creationDate, Double minimalPoint, String description, int tunedInWorks, Difficulty difficulty, Discipline discipline) {
+        this.id = id;
         this.name = name;
         this.coordinates = coordinates;
         this.creationDate = creationDate;
@@ -35,58 +39,15 @@ public class LabWork extends Element {
         this.discipline = discipline;
     }
 
-    /**
-     * Обновляет указатель следующего ID
-     */
-    public static void updateNextId(CollectionManager collectionManager) {
-        var maxId = collectionManager
-                .getCollection()
-                .stream().filter(Objects::nonNull)
-                .map(LabWork::getId)
-                .mapToInt(Integer::intValue).max().orElse(0);
-        nextId = maxId + 1;
+    //?
+    public LabWork(int id, String name, Coordinates coordinates, Double minimalPoint, String description, int tunedInWorks, Difficulty difficulty, Discipline discipline) {
+        this(id, name, coordinates, LocalDate.now(), minimalPoint, description, tunedInWorks, difficulty, discipline);
     }
 
-    public static String toArray(LabWork e) {
-        return null;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public static LabWork fromArray() {
-        return null;
-    }
-
-    /**
-     * Валидирует правильность полей.
-     */
-    @Override
-    public boolean validate() {
-        if (id <= 0) return false;
-        if (name == null || name.isEmpty()) return false;
-        if (coordinates == null) return false;
-        if (creationDate == null) return false;
-        if (minimalPoint == null || minimalPoint <= 0) return false;
-        if (description == null || description.length()<=5287) return false;
-        if (difficulty == null) return false;
-        if (discipline == null) return false;
-        return true;
-    }
-
-    public void update(LabWork labWork) {
-        this.name = labWork.name;
-        this.coordinates = labWork.coordinates;
-        this.creationDate = labWork.creationDate;
-        this.minimalPoint = labWork.minimalPoint;
-        this.description = labWork.description;
-        this.tunedInWorks = labWork.tunedInWorks;
-        this.difficulty = labWork.difficulty;
-        this.discipline = labWork.discipline;
-    }
-
-    public static void touchNextId() {
-        nextId++;
-    }
-
-    @Override
     public int getId() {
         return id;
     }
@@ -123,6 +84,68 @@ public class LabWork extends Element {
         return discipline;
     }
 
+    public void update(LabWork labWork) {
+        this.name = labWork.name;
+        this.coordinates = labWork.coordinates;
+        this.creationDate = labWork.creationDate;
+        this.minimalPoint = labWork.minimalPoint;
+        this.description = labWork.description;
+        this.tunedInWorks = labWork.tunedInWorks;
+        this.difficulty = labWork.difficulty;
+        this.discipline = labWork.discipline;
+    }
+
+    public static LabWork fromArray(String[] a) {
+        int id;
+        String name;
+        Coordinates coordinates;
+        LocalDate creationDate;
+        Double minimalPoint;
+        String description;
+        int tunedInWorks;
+        Difficulty difficulty;
+        Discipline discipline;
+        try {
+            try { id = Integer.parseInt(a[0]); } catch (NumberFormatException e) { id = Integer.parseInt(null); }
+            name = a[1];
+            coordinates = new Coordinates(a[2]);
+            try { creationDate = LocalDate.parse(a[3], DateTimeFormatter.ISO_DATE_TIME); } catch (DateTimeParseException e) { creationDate = null; }
+            try { minimalPoint = (a[4].equals("null") ? null : Double.parseDouble(a[4])); } catch (NumberFormatException e) { minimalPoint = null; }
+            description = a[5];
+            try { tunedInWorks = Integer.parseInt(a[6]); } catch (NumberFormatException e) { tunedInWorks = Integer.parseInt(null); }
+            try { difficulty = Difficulty.valueOf(a[7]); } catch (NullPointerException | IllegalArgumentException  e) { difficulty = null; }
+            discipline = new Discipline(a[8]);
+        }catch (ArrayIndexOutOfBoundsException e) {}
+        return null;
+    }
+
+    public static String[] toArray(LabWork e) {
+        var list = new ArrayList<String>();
+        list.add(Integer.toString(e.getId()));
+        list.add(e.getName());
+        list.add(e.getCoordinates().toString());
+        list.add(e.getCreationDate().format(DateTimeFormatter.ISO_DATE_TIME));
+        list.add(e.getMinimalPoint() == null ? "null" : e.getMinimalPoint().toString());
+        list.add(e.getDescription());
+        list.add(Integer.toString(e.getTunedInWorks()));
+        list.add(e.getDifficulty().toString());
+        list.add(e.getDiscipline().toString());
+        return list.toArray(new String[0]);
+    }
+
+    @Override
+    public boolean validate() {
+        if (id <= 0) return false;
+        if (name == null || name.isEmpty()) return false;
+        if (coordinates == null) return false;
+        if (creationDate == null) return false;
+        if (minimalPoint != null && minimalPoint <= 0) return false;
+        if (description == null || description.length() <= 5287) return false;
+        if (difficulty == null) return false;
+        if (discipline == null) return false;
+        return true;
+    }
+
     @Override
     public int compareTo(Element element) {
         return (this.id - element.getId());
@@ -132,11 +155,8 @@ public class LabWork extends Element {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LabWork labWork = (LabWork) o;
-        return id == labWork.id && Objects.equals(name, labWork.name) && Objects.equals(coordinates, labWork.coordinates)
-                && Objects.equals(creationDate, labWork.creationDate) && Objects.equals(minimalPoint, labWork.minimalPoint)
-                && Objects.equals(description, labWork.description) && Objects.equals(tunedInWorks, labWork.tunedInWorks)
-                && Objects.equals(difficulty, labWork.difficulty) && Objects.equals(discipline, labWork.discipline);
+        LabWork that = (LabWork) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
@@ -146,16 +166,14 @@ public class LabWork extends Element {
 
     @Override
     public String toString() {
-        String info = "";
-        info += "Продукт №" + id;
-        info += "добавлен " + creationDate.toString();
-        info += "\n Название: " + name;
-        info += "\n Местоположение: " + coordinates;
-        info += "\n Минимальная точка: " + minimalPoint;
-        info += "\n Описание: " + description;
-        info += "\n Настроенный в работах: " + tunedInWorks;
-        info += "\n Сложность: " + difficulty;
-        info += "\n Дисциплина: " + discipline;
-        return info;
+        return "d{\"id\": " + id + ", " +
+                "\"name\": \"" + name + "\", " +
+                "\"coordinates\": \"" + coordinates + "\", " +
+                "\"creationDate\" = \"" + creationDate.format(DateTimeFormatter.ISO_DATE_TIME) + "\", " +
+                "\"minimalPoint\": " + (minimalPoint == null ? "null" : "\""+minimalPoint.toString()+"\"") + ", " +
+                "\"description\" = \"" + description + "\", " +
+                "\"tunedInWorks\": \"" + tunedInWorks + "\", " +
+                "\"difficulty\" = \"" + difficulty + "\", " +
+                "\"discipline\": \"" + discipline + "\", " +"}";
     }
 }

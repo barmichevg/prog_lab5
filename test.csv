@@ -1,0 +1,4 @@
+id,name,coordinates,creationDate,minimalPoint,description,tunedInWorks,difficulty,discipline
+"1231,prog,25;17.4,22.02.2023,200,progdescription,1,HOPELESS,Dprog;321"
+"3373,chtoto,16;15.5,22.02.2023,450,chtotodescription,2,NORMAL,Dchtoto;123"
+"2,chtoto2,2143;4356.0,22.02.2023,2135,chtoto2description,0,VERY_HARD,Dchtoto2;322"

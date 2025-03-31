@@ -1,43 +1,32 @@
 package commands;
-
-/**требует проверки
- * Перемешать элементы коллекции в случайном порядке
- */
+////////////////////////???????????ПРОВЕРКА
 import managers.CollectionManager;
 import utility.Console;
-import utility.ExecutionResponse;
 
 /**
- * Команда shuffle - перемешать элементы коллекции в случайном порядке
- *
- * @author petrovviacheslav
+ * Перемешать элементы коллекции в случайном порядке
  */
 public class Shuffle extends Command {
-    /**
-     * Менеджер коллекции
-     */
+    private final Console console;
     private final CollectionManager collectionManager;
 
-    /**
-     * Конструктор класса Shuffle
-     *
-     * @param collectionManager менеджер коллекции
-     * @param console           консоль
-     */
     public Shuffle(Console console, CollectionManager collectionManager) {
         super("shuffle", "перемешать элементы коллекции в случайном порядке");
+        this.console = console;
         this.collectionManager = collectionManager;
     }
-
-    /**
-     * Перемешивает коллекцию
-     *
-     * @param arguments аргумент команды
-     * @return true - команда выполнена успешно, иначе false
+    /**???????????????????????????????
+     * Выполняет команду
+     * @return Успешность выполнения команды.
      */
-    public ExecutionResponse apply(String[] arguments) {
-        if (!arguments[1].isEmpty()) return new ExecutionResponse(false, "Неправильное количество аргументов!\nИспользование: '" + getName() + "'");
-
-        return new ExecutionResponse(collectionManager.shuffle());
+    @Override
+    public boolean apply(String[] arguments) {
+        if (!arguments[1].isEmpty()) {
+            console.println("Неправильное количество аргументов!");
+            console.println("Использование: '" + getName() + "'");
+            return false;
+        }
+        collectionManager.shuffle();
+        return true;
     }
 }

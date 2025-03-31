@@ -4,12 +4,9 @@ import managers.CollectionManager;
 import models.Ask;
 import models.LabWork;
 import utility.Console;
-import utility.ExecutionResponse;
-
 
 /**
- * Команда 'add'. Добавляет новый элемент в коллекцию.
- * @author dim0n4eg
+ * Добавить новый элемент в коллекцию
  */
 public class Add extends Command {
     private final Console console;
@@ -20,25 +17,33 @@ public class Add extends Command {
         this.console = console;
         this.collectionManager = collectionManager;
     }
-
     /**
      * Выполняет команду
      * @return Успешность выполнения команды.
      */
     @Override
-    public ExecutionResponse apply(String[] arguments) {
+    public boolean apply(String[] arguments) {
         try {
-            if (!arguments[1].isEmpty()) return new ExecutionResponse(false, "Неправильное количество аргументов!\nИспользование: '" + getName() + "'");
-
+            if (!arguments[1].isEmpty()) {
+                console.println("Неправильное количество аргументов!");
+                console.println("Использование: '" + getName() + "'");
+                return false;
+            }
             console.println("* Создание нового Дракона:");
-            LabWork d = Ask.askLabWork(console, collectionManager.getFreeId());
+            LabWork d = Ask.askLabWork(console, collectionManager);
 
             if (d != null && d.validate()) {
                 collectionManager.add(d);
-                return new ExecutionResponse("Дракон успешно добавлен!");
-            } else return new ExecutionResponse(false,"Поля дракона не валидны! Дракон не создан!");
+                collectionManager.addLog("add " + d.getId(), true);
+                console.println("Дракон успешно добавлен!");
+                return true;
+            } else {
+                console.printError("Поля дракона не валидны! Дракон не создан!");
+                return false;
+            }
         } catch (Ask.AskBreak e) {
-            return new ExecutionResponse(false,"Отмена...");
+            console.println("Отмена...");
+            return false;
         }
     }
 }

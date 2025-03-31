@@ -2,12 +2,11 @@ package commands;
 
 import utility.Console;
 import managers.CollectionManager;
-import java.time.LocalDateTime;
-import utility.ExecutionResponse;
+
+import java.time.LocalDate;
 
 /**
- * Вывести в стандартный поток вывода информацию о коллекции
- * (тип, дата инициализации, количество элементов и т.д.)
+ * Вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)
  */
 public class Info extends Command {
     private final Console console;
@@ -18,29 +17,28 @@ public class Info extends Command {
         this.console = console;
         this.collectionManager = collectionManager;
     }
-
     /**
      * Выполняет команду
      * @return Успешность выполнения команды.
      */
     @Override
-    public ExecutionResponse apply(String[] arguments) {
-        if (!arguments[1].isEmpty())
-            return new ExecutionResponse(false, "Неправильное количество аргументов!\nИспользование: '" + getName() + "'");
-
-        LocalDateTime lastInitTime = collectionManager.getLastInitTime();
+    public boolean apply(String[] arguments) {
+        if (!arguments[1].isEmpty()) {
+            console.println("Неправильное количество аргументов!");
+            console.println("Использование: '" + getName() + "'");
+            return false;
+        }
+        LocalDate lastInitTime = collectionManager.getLastInitTime();
         String lastInitTimeString = (lastInitTime == null) ? "в данной сессии инициализации еще не происходило" :
-                lastInitTime.toLocalDate().toString() + " " + lastInitTime.toLocalTime().toString();
-
-        LocalDateTime lastSaveTime = collectionManager.getLastSaveTime();
+                lastInitTime.toString() + " " + lastInitTime.toString();
+        LocalDate lastSaveTime = collectionManager.getLastSaveTime();
         String lastSaveTimeString = (lastSaveTime == null) ? "в данной сессии сохранения еще не происходило" :
-                lastSaveTime.toLocalDate().toString() + " " + lastSaveTime.toLocalTime().toString();
-
-        var s="Сведения о коллекции:\n";
-        s+=" Тип: " + collectionManager.getCollection().getClass().toString()+"\n";
-        s+=" Количество элементов: " + collectionManager.getCollection().size()+"\n";
-        s+=" Дата последнего сохранения: " + lastSaveTimeString+"\n";
-        s+=" Дата последней инициализации: " + lastInitTimeString;
-        return new ExecutionResponse(s);
+                lastSaveTime.toString() + " " + lastSaveTime.toString();
+        console.println("Сведения о коллекции:");
+        console.println(" Тип: " + collectionManager.getCollection().getClass().toString());
+        console.println(" Количество элементов: " + collectionManager.getCollection().size());
+        console.println(" Дата последнего сохранения: " + lastSaveTimeString);
+        console.println(" Дата последней инициализации: " + lastInitTimeString);
+        return true;
     }
 }

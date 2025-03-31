@@ -2,7 +2,6 @@ package commands;
 
 /**
  * Абстрактная команда с именем и описанием
- * @author dim0n4eg
  */
 public abstract class Command implements Describable, Executable {
     private final String name;
@@ -12,14 +11,12 @@ public abstract class Command implements Describable, Executable {
         this.name = name;
         this.description = description;
     }
-
     /**
      * @return Название и использование команды.
      */
     public String getName() {
         return name;
     }
-
     /**
      * @return Описание команды.
      */

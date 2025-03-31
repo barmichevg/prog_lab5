@@ -1,5 +1,4 @@
 package commands;
-import utility.ExecutionResponse;
 
 /**
  * Интерфейс для всех выполняемых команд.
@@ -7,9 +6,8 @@ import utility.ExecutionResponse;
 public interface Executable {
     /**
      * Выполнить что-либо.
-     *
      * @param arguments Аргумент для выполнения
      * @return результат выполнения
      */
-    ExecutionResponse apply(String[] arguments);
+    boolean apply(String[] arguments);
 }

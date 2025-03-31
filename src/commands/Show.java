@@ -2,7 +2,6 @@ package commands;
 
 import managers.CollectionManager;
 import utility.Console;
-import utility.ExecutionResponse;
 
 /**
  * Вывести в стандартный поток вывода все элементы коллекции в строковом представлении
@@ -22,9 +21,13 @@ public class Show extends Command {
      * @return Успешность выполнения команды.
      */
     @Override
-    public ExecutionResponse apply(String[] arguments) {
-        if (!arguments[1].isEmpty()) return new ExecutionResponse(false, "Неправильное количество аргументов!\nИспользование: '" + getName() + "'");
-
-        return new ExecutionResponse(collectionManager.toString());
+    public boolean apply(String[] arguments) {
+        if (!arguments[1].isEmpty()) {
+            console.println("Неправильное количество аргументов!");
+            console.println("Использование: '" + getName() + "'");
+            return false;
+        }
+        console.println(collectionManager);
+        return true;
     }
 }
