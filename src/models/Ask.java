@@ -41,7 +41,7 @@ public class Ask {
             LocalDate creationDate;
             while (true) {
                 console.print("creationDate: " +
-                        LocalDate.now().format(DateTimeFormatter.ISO_DATE_TIME) + " or 2023-03-11): ");
+                        LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + ": ");
                 var line = console.readln().trim();
                 if (line.equals("exit")) throw new AskBreak();
                 if (line.equals("")) {
@@ -49,11 +49,11 @@ public class Ask {
                     break;
                 }
                 try {
-                    creationDate = LocalDate.parse(line, DateTimeFormatter.ISO_DATE_TIME);
+                    creationDate = LocalDate.parse(line, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                     break;
                 } catch (DateTimeParseException e) {}
                 try {
-                    creationDate = LocalDate.parse(line + "T00:00:00.0000", DateTimeFormatter.ISO_DATE_TIME);
+                    creationDate = LocalDate.parse(line + "T00:00:00.0000", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                     break;
                 } catch (DateTimeParseException e) {}
             }
@@ -106,7 +106,7 @@ public class Ask {
 //            private Integer x; //Поле не может быть null
 //            private float y; //Максимальное значение поля: 654
             console.print("coordinates.x: ");
-            Integer x;
+            int x;
             while (true) {
                 var line = console.readln().trim();
                 if (line.equals("exit")) throw new AskBreak();
@@ -163,7 +163,7 @@ public class Ask {
                 if (!name.isEmpty()) break;
             }
             console.print("practiceHours: ");
-            Long practiceHours;
+            long practiceHours;
             while (true) {
                 var line = console.readln().trim();
                 if (line.equals("exit")) throw new AskBreak();

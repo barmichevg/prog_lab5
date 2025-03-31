@@ -5,7 +5,7 @@ import models.Ask;
 import models.LabWork;
 import utility.Console;
 
-/**
+/**FIX выводит максимальное
  * Добавить новый элемент в коллекцию
  */
 public class Add extends Command {

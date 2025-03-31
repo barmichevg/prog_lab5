@@ -109,7 +109,7 @@ public class LabWork implements Comparable<Element>, Validatable {
             try { id = Integer.parseInt(a[0]); } catch (NumberFormatException e) { id = Integer.parseInt(null); }
             name = a[1];
             coordinates = new Coordinates(a[2]);
-            try { creationDate = LocalDate.parse(a[3], DateTimeFormatter.ISO_DATE_TIME); } catch (DateTimeParseException e) { creationDate = null; }
+            try { creationDate = LocalDate.parse(a[3], DateTimeFormatter.ofPattern("dd-MM-yyyy")); } catch (DateTimeParseException e) { creationDate = null; }
             try { minimalPoint = (a[4].equals("null") ? null : Double.parseDouble(a[4])); } catch (NumberFormatException e) { minimalPoint = null; }
             description = a[5];
             try { tunedInWorks = Integer.parseInt(a[6]); } catch (NumberFormatException e) { tunedInWorks = Integer.parseInt(null); }
@@ -124,7 +124,7 @@ public class LabWork implements Comparable<Element>, Validatable {
         list.add(Integer.toString(e.getId()));
         list.add(e.getName());
         list.add(e.getCoordinates().toString());
-        list.add(e.getCreationDate().format(DateTimeFormatter.ISO_DATE_TIME));
+        list.add(e.getCreationDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         list.add(e.getMinimalPoint() == null ? "null" : e.getMinimalPoint().toString());
         list.add(e.getDescription());
         list.add(Integer.toString(e.getTunedInWorks()));
@@ -135,14 +135,14 @@ public class LabWork implements Comparable<Element>, Validatable {
 
     @Override
     public boolean validate() {
-        if (id <= 0) return false;
-        if (name == null || name.isEmpty()) return false;
-        if (coordinates == null) return false;
-        if (creationDate == null) return false;
-        if (minimalPoint != null && minimalPoint <= 0) return false;
-        if (description == null || description.length() <= 5287) return false;
-        if (difficulty == null) return false;
-        if (discipline == null) return false;
+//        if (id <= 0) return false;
+//        if (name == null || name.isEmpty()) return false;
+//        if (coordinates == null) return false;
+//        if (creationDate == null) return false;
+//        if (minimalPoint != null && minimalPoint <= 0) return false;
+//        if (description == null || description.length() <= 5287) return false;
+//        if (difficulty == null) return false;
+//        if (discipline == null) return false;
         return true;
     }
 
@@ -169,7 +169,7 @@ public class LabWork implements Comparable<Element>, Validatable {
         return "d{\"id\": " + id + ", " +
                 "\"name\": \"" + name + "\", " +
                 "\"coordinates\": \"" + coordinates + "\", " +
-                "\"creationDate\" = \"" + creationDate.format(DateTimeFormatter.ISO_DATE_TIME) + "\", " +
+                "\"creationDate\" = \"" + creationDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "\", " +
                 "\"minimalPoint\": " + (minimalPoint == null ? "null" : "\""+minimalPoint.toString()+"\"") + ", " +
                 "\"description\" = \"" + description + "\", " +
                 "\"tunedInWorks\": \"" + tunedInWorks + "\", " +
