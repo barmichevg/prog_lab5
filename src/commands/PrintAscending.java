@@ -33,11 +33,12 @@ public class PrintAscending extends Command {
         }
         Vector<LabWork> CollectionCopy = collectionManager.getCollection();
         Comparator<LabWork> comparator = new Comparator<LabWork>() {
+            @Override
             public int compare(LabWork o1, LabWork o2) {
                 return Integer.compare(o1.getId(), o2.getId());
             }
         };
-        CollectionCopy.sort(comparator);//Collections.sort(CollectionCopy, comparator);
+        CollectionCopy.sort(comparator);
         for (LabWork labWork : CollectionCopy) {
             console.println(labWork.toString());
         }

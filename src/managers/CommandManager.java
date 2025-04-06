@@ -12,7 +12,6 @@ import java.util.Map;
  */
 public class CommandManager {
     private final Map<String, Command> commands = new LinkedHashMap<>();
-    private final List<String> commandHistory = new ArrayList<>();
 
     /**
      * Добавляет команду.
@@ -28,20 +27,5 @@ public class CommandManager {
      */
     public Map<String, Command> getCommands() {
         return commands;
-    }
-
-    /**
-     * @return История команд.
-     */
-    public List<String> getCommandHistory() {
-        return commandHistory;
-    }
-
-    /**
-     * Добавляет команду в историю.
-     * @param command Команда.
-     */
-    public void addToHistory(String command) {
-        commandHistory.add(command);
     }
 }

@@ -1,8 +1,11 @@
 package commands;
 
 import managers.CollectionManager;
+import models.LabWork;
 import utility.Console;
 import models.Ask;
+
+import java.util.Collections;
 
 /**
  * Обновить значение элемента коллекции, id которого равен заданному
@@ -35,13 +38,13 @@ public class Update extends Command {
                 console.println("не существующий ID");
                 return false;
             }
-            console.println("* Обновление Лабораторной:");//???????
-            var d = Ask.askLabWork(console, collectionManager);
+            console.println("* Обновление Лабораторной:");
+            LabWork d = Ask.askLabWork(console, collectionManager);
             if (d != null && d.validate()) {
                 collectionManager.add(d);
                 collectionManager.update();
 
-                var old = collectionManager.byId(id);
+                LabWork old = collectionManager.byId(id);
                 collectionManager.swap(d.getId(), id);
                 collectionManager.update();
 
@@ -49,7 +52,7 @@ public class Update extends Command {
                 collectionManager.update();
                 return true;
             } else {
-                console.println("Поля Лабораторной не валидны! Лабораторная не обновлена!");//??????
+                console.println("Поля Лабораторной не валидны! Лабораторная не обновлена!");
                 return false;
             }
         } catch (Ask.AskBreak e) {

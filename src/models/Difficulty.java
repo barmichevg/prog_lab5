@@ -14,7 +14,7 @@ public enum Difficulty {
      */
     public static String names() {
         StringBuilder nameList = new StringBuilder();
-        for (var difficultyType : values()) {
+        for (Difficulty difficultyType : values()) {
             nameList.append(difficultyType.name()).append(", ");
         }
         return nameList.substring(0, nameList.length()-2);

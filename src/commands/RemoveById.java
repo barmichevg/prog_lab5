@@ -2,7 +2,6 @@ package commands;
 
 import managers.CollectionManager;
 import utility.Console;
-import models.LabWork;
 
 /**
  * Удалить элемент из коллекции по его id

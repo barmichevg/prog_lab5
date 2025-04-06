@@ -2,7 +2,6 @@ package managers;
 
 
 import models.LabWork;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -87,12 +86,12 @@ public class CollectionManager {
      * @return true в случае успеха.
      */
     public boolean swap(int id, int repId) {
-        var e = byId(id);
-        var re = byId(repId);
+        LabWork e = byId(id);
+        LabWork re = byId(repId);
         if (e == null) return false;
         if (re == null) return false;
-        var ind = collection.indexOf(e);
-        var rind = collection.indexOf(re);
+        int ind = collection.indexOf(e);
+        int rind = collection.indexOf(re);
         if (ind < 0) return false;
         if (rind < 0) return false;
         e.setId(repId);
@@ -109,7 +108,7 @@ public class CollectionManager {
     public boolean remove(int id) {
         LabWork ret = byId(id);
         if (ret == null) return false;
-        var ind = collection.indexOf(ret);
+        int ind = collection.indexOf(ret);
         if (ind < 0) return false;
         collection.remove(ret);
 
@@ -146,7 +145,7 @@ public class CollectionManager {
         labWorks.clear();
         fileManager.readCollection(collection);
         lastInitTime = LocalDateTime.now();
-        for (var e : collection)
+        for (LabWork e : collection)
             if (byId(e.getId()) != null) {
                 collection.clear();
                 return false;

@@ -1,6 +1,7 @@
 package commands;
 
 import managers.CollectionManager;
+import models.LabWork;
 import utility.Console;
 
 /**
@@ -29,7 +30,7 @@ public class RemoveAt extends Command {
         int ind = -1;
         try { ind = Integer.parseInt(arguments[1].trim()); } catch (NumberFormatException e) { console.println("ID не распознан"); return false; }
         try {
-            var d = collectionManager.getCollection().get(ind);
+            LabWork d = collectionManager.getCollection().get(ind);
             collectionManager.remove(d.getId());
             collectionManager.update();
             console.println("Лабораторная успешно удалена!");

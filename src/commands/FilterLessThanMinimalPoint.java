@@ -30,8 +30,8 @@ public class FilterLessThanMinimalPoint extends Command {
             console.println("Использование: '" + getName() + "'");
             return false;
         }
-        var minimalPoint = Double.parseDouble(arguments[1]);
-        var LabWork = filterLessThanMinimalPoint(minimalPoint);
+        Double minimalPoint = Double.parseDouble(arguments[1]);
+        List<LabWork> LabWork = filterLessThanMinimalPoint(minimalPoint);
         if (LabWork.isEmpty()) {console.println("Лабораторных с minimalPoint меньше " + minimalPoint + " не обнаружено.");}
         else {
             console.println("Лабораторных с minimalPoint меньше " + minimalPoint + " встречается " + LabWork.size() + " раз.\n");

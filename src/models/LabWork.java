@@ -1,6 +1,5 @@
 package models;
 
-import managers.CollectionManager;
 import utility.Element;
 import utility.Validatable;
 
@@ -117,7 +116,7 @@ public class LabWork implements Comparable<Element>, Validatable {
     }
 
     public static String[] toArray(LabWork e) {
-        var list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<String>();
         list.add(Integer.toString(e.getId()));
         list.add(e.getName());
         list.add(e.getCoordinates().toString());
@@ -163,14 +162,39 @@ public class LabWork implements Comparable<Element>, Validatable {
 
     @Override
     public String toString() {
-        return "{\"id\": " + id + ", " +
-                "\"name\": " + name + ", " +
-                "\"coordinates\": " + coordinates + ", " +
-                "\"creationDate\": " + creationDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + ", " +
-                "\"minimalPoint\": " + (minimalPoint == null ? "null" : minimalPoint.toString()) + ", " +
-                "\"description\": " + description + ", " +
-                "\"tunedInWorks\": " + tunedInWorks + ", " +
-                "\"difficulty\": " + difficulty + ", " +
-                "\"discipline\": " + discipline + "}";
+        return String.format(
+                "+-------------------------------------+----------------------+ \n" +
+                "| %-35s | %-20s | \n" +
+                "| %-35s | %-20s | \n" +
+                "| %-35s | %-20s | \n" +
+                "| %-35s | %-20s | \n" +
+                "| %-35s | %-20s | \n" +
+                "| %-35s | %-20s | \n" +
+                "| %-35s | %-20s | \n" +
+                "| %-35s | %-20s | \n" +
+                "| %-35s | %-20s | \n" +
+                "+-------------------------------------+----------------------+",
+                "id", id,
+                "name", name,
+                "coordinates (x;y)", coordinates,
+                "creationDate (dd-MM-yyyy)", creationDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                "minimalPoint", (minimalPoint == null ? "null" : minimalPoint.toString()),
+                "description", description,
+                "tunedInWorks", tunedInWorks,
+                "difficulty", difficulty,
+                "discipline (name;practiceHours)", discipline
+        );
     }
+
+//    public String toString() {
+//        return "{\"id\": " + id + ", " +
+//                "\"name\": " + name + ", " +
+//                "\"coordinates\" (x;y): " + coordinates + ", " +
+//                "\"creationDate\": " + creationDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + ", " +
+//                "\"minimalPoint\": " + (minimalPoint == null ? "null" : minimalPoint.toString()) + ", " +
+//                "\"description\": " + description + ", " +
+//                "\"tunedInWorks\": " + tunedInWorks + ", " +
+//                "\"difficulty\": " + difficulty + ", " +
+//                "\"discipline\" (name;practiceHours): " + discipline + "}";
+//    }
 }

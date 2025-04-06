@@ -1,28 +1,24 @@
 import commands.*;
-
-import managers.CollectionManager;
-import managers.CommandManager;
-import managers.FileManager;
-
+import managers.*;
 import utility.StandardConsole;
 import utility.Runner;
 
 public class Main {
     public static void main(String[] args) {
-        var console = new StandardConsole();
+        StandardConsole console = new StandardConsole();
 
         if (args.length == 0) {
             console.println("Введите имя загружаемого файла как аргумент командной строки");
             System.exit(1);
         }
 
-        var fileManager = new FileManager(args[0], console);
-        var collectionManager = new CollectionManager(fileManager);
+        FileManager fileManager = new FileManager(args[0], console);
+        CollectionManager collectionManager = new CollectionManager(fileManager);
         if (!collectionManager.loadCollection()) {
             System.exit(1);
         }
 
-        var commandManager = new CommandManager() {{
+        CommandManager commandManager = new CommandManager() {{
             register("help", new Help(console, this));
             register("info", new Info(console, collectionManager));
             register("show", new Show(console, collectionManager));

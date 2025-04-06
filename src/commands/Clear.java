@@ -1,8 +1,8 @@
 package commands;
 
 import managers.CollectionManager;
-import utility.Console;
 import models.LabWork;
+import utility.Console;
 
 /**
  * Очистить коллекцию
@@ -27,9 +27,8 @@ public class Clear extends Command {
             console.println("Использование: '" + getName() + "'");
             return false;
         }
-//????????????????????????????????????????????????
         while (collectionManager.getCollection().size() > 0) {
-            var labWork = collectionManager.getCollection().lastElement();
+            LabWork labWork = collectionManager.getCollection().lastElement();
             collectionManager.remove(labWork.getId());
         }
         collectionManager.update();

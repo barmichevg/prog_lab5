@@ -28,7 +28,7 @@ public class FileManager {
         try {
             StringWriter sw = new StringWriter();
             CSVWriter csvWriter = new CSVWriter(sw, ',');
-            for (var e : collection) {
+            for (LabWork e : collection) {
                 csvWriter.writeNext(LabWork.toArray(e));
             }
             String csv = sw.toString();
@@ -46,7 +46,7 @@ public class FileManager {
     public void writeCollection(Collection<LabWork> collection) {
         OutputStreamWriter writer = null;
         try {
-            var csv = collection2CSV(collection);
+            String csv = collection2CSV(collection);
             if (csv == null) return;
             writer = new OutputStreamWriter(new FileOutputStream(fileName));
             try {
@@ -99,14 +99,14 @@ public class FileManager {
      */
     public void readCollection(Collection<LabWork> collection) {
         if (fileName != null && !fileName.isEmpty()) {
-            try (var fileReader = new Scanner(new File(fileName))) {
-                var s = new StringBuilder("");
+            try (Scanner fileReader = new Scanner(new File(fileName))) {
+                StringBuilder s = new StringBuilder("");
                 while (fileReader.hasNextLine()) {
                     s.append(fileReader.nextLine());
                     s.append("\n");
                 }
                 collection.clear();
-                for (var e: CSV2collection(s.toString()))
+                for (LabWork e: CSV2collection(s.toString()))
                     collection.add(e);
                 if (collection != null) {
                     console.println("Коллекция успешна загружена!");

@@ -28,7 +28,7 @@ public class MinByCoordinates extends Command {
             return false;
         }
         LabWork min = null;
-        for (var e : collectionManager.getCollection()) {
+        for (LabWork e : collectionManager.getCollection()) {
             if (min==null || min.getCoordinates().getx() > e.getCoordinates().getx()) min = e;
         }
         if (min == null) {

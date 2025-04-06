@@ -37,10 +37,16 @@ public class StandardConsole implements Console {
         System.out.println("Error(out): " + obj);
     }
 
+    /**
+     * Читает строку
+     */
     public String readln() throws NoSuchElementException, IllegalStateException {
         return (fileScanner!=null?fileScanner:defScanner).nextLine();
     }
 
+    /**
+     * Проверяет есть ли следующая строка
+     */
     public boolean isCanReadln() throws IllegalStateException {
         return (fileScanner!=null?fileScanner:defScanner).hasNextLine();
     }

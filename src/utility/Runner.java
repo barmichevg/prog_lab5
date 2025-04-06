@@ -8,8 +8,8 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.nio.file.*;
 
+import commands.Command;
 import managers.CommandManager;
-import utility.Console;
 
 public class Runner {
 
@@ -42,7 +42,6 @@ public class Runner {
                 userCommand = (console.readln().trim() + " ").split(" ", 2);
                 userCommand[1] = userCommand[1].trim();
 
-                commandManager.addToHistory(userCommand[0]);
                 commandStatus = launchCommand(userCommand);
             } while (commandStatus != ExitCode.EXIT);
 
@@ -83,10 +82,10 @@ public class Runner {
                     userCommand[1] = userCommand[1].trim();
                 }
                 console.println(console.getPrompt() + String.join(" ", userCommand));
-                var needLaunch = true;
+                boolean needLaunch = true;
                 if (userCommand[0].equals("execute_script")) {
-                    var recStart = -1;
-                    var i = 0;
+                    int recStart = -1;
+                    int i = 0;
                     for (String script : scriptStack) {
                         i++;
                         if (userCommand[1].equals(script)) {
@@ -115,7 +114,6 @@ public class Runner {
             return commandStatus;
         } catch (FileNotFoundException exception) {
             console.printError("Файл со скриптом не найден!");
-            //console.printError(exception.toString());
         } catch (NoSuchElementException exception) {
             console.printError("Файл со скриптом пуст!");
         } catch (IllegalStateException exception) {
@@ -128,13 +126,13 @@ public class Runner {
     }
 
     /**
-     * Launchs the command.
+     * Запускает программу
      * @param userCommand Команда для запуска
      * @return Код завершения.
      */
     private ExitCode launchCommand(String[] userCommand) {
         if (userCommand[0].equals("")) return ExitCode.OK;
-        var command = commandManager.getCommands().get(userCommand[0]);
+        Command command = commandManager.getCommands().get(userCommand[0]);
 
         if (command == null) {
             console.printError("Команда '" + userCommand[0] + "' не найдена. Наберите 'help' для справки");
